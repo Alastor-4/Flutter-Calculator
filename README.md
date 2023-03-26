@@ -1,16 +1,16 @@
-# calculadora
+# Calculadora Básica
 
-A new Flutter project.
+Una calculadora simple en Flutter, usando Provider y Shared Preferences.
 
-## Getting Started
+Tambíen tiene icono añadido con Flutter Launcher Icons.
 
-This project is a starting point for a Flutter application.
+## Datos:
 
-A few resources to get you started if this is your first Flutter project:
+Tiene Modo Oscuro, y estan verificados todas las operaciones(Básicas al menos), hasta el %.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Screenshots asociadas para ver el resultado.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Recomendaciones
+- Mejorar el diseño.
+- Implementar Historial.
+- Agregar más funcionalidades.

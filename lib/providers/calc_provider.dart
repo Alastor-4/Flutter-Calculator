@@ -1,6 +1,7 @@
 import 'package:eval_ex/expression.dart';
 import 'package:flutter/material.dart';
 
+//método necesario para retornar el último caracter del texto de un string cualquiera, se le añade a cualquier strings
 extension Strings on String {
   String get last => isEmpty ? '' : this[length - 1];
 }
@@ -20,6 +21,7 @@ class CalcProvider with ChangeNotifier {
     return 30;
   }
 
+  //propiedades para acceder a estos datos desde terceros
   String get input => controller.text;
 
   String get result => _result;
@@ -43,18 +45,57 @@ class CalcProvider with ChangeNotifier {
     //Este método es para detectar cuantos paréntesis '(' y equilibrarlos con ')' y asi poder retornar el cálculo
     if ('('.allMatches(controller.text).length >=
         ')'.allMatches(controller.text).length) {
-      return controller.text +
-          ')' *
-              ('('.allMatches(controller.text).length -
-                  ')'.allMatches(controller.text).length);
+      return (controller.text.contains('%'))
+          ? calcPercentage(controller.text)
+          : controller.text +
+              ')' *
+                  ('('.allMatches(controller.text).length -
+                      ')'.allMatches(controller.text).length);
     }
     //Si todo está bien retorna el valor normal
     return controller.text;
   }
 
+  //Método para calcular el porcentaje
+  String calcPercentage(String valores) {
+    int indice = valores.indexOf('%'); //busca el indice donde esta el %
+    double valorDer = 0;
+    String leftPart = valores.substring(0, indice),
+        rightPart = valores.substring(indice + 1, valores.length);
+    //Divide el texto por ahi
+
+    double valorIzq = num.parse(leftPart.substring(
+            leftPart.lastIndexOf(RegExp(r'[-+/*]')) + 1, leftPart.length))
+        .toDouble(); //perfect
+
+    if (rightPart.contains(RegExp(r'[-+/*]'))) {
+      //si la parte derecha no contiene ningun signo la asigna
+      //completa como segundo parametro, sino la pica por el simbolo y la añade
+      valorDer = num.parse(
+              rightPart.substring(0, rightPart.indexOf(RegExp(r'[-+/*]'))))
+          .toDouble();
+    } else {
+      valorDer = num.parse(rightPart).toDouble();
+    }
+
+    String result = ((valorIzq * valorDer) / 100).toString();
+    //concatena la parte izquierda del
+    String value = leftPart.substring(
+            0, leftPart.lastIndexOf(RegExp(r'[-+/*]')) + 1) +
+        result +
+        ((rightPart
+                .isNotEmpty) //si el miembro derecho esta vacio, le pone 0 para que realice el calculo, sino lo pone normal
+            ? rightPart.substring(((rightPart.indexOf(RegExp(r'[-+/*]'))) == -1)
+                ? 0
+                : rightPart.indexOf(RegExp(r'[-+/*]')))
+            : '0');
+    //Lo hice luego de 4 horas y no se como funciona bien la condición, mejor no toques nada y disfruta, pero es algo así
+    return value;
+  }
+
   //Botón AC Correcto
   void allClear() {
-    controller.clear();
+    controller.clear(); //limpia el controlador y oculta el resultado
     showResult = false;
     notifyListeners();
   }
@@ -139,9 +180,6 @@ class CalcProvider with ChangeNotifier {
     showResult = false;
     notifyListeners();
   }
-  //TODO: %
-
-  //TODO: Historial
 
   //TODO: Icono
 
